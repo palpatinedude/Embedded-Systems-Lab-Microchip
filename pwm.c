@@ -162,13 +162,13 @@ void init_pwm() {
 	TCA0.SPLIT.CTRLD = TCA_SPLIT_SPLITM_bm;  // enable split mode
 	TCA0.SPLIT.CTRLA = TCA_SPLIT_CLKSEL_DIV64_gc;  // set clock prescaler to 64
 
-	// configure blade PWM: 1ms period, 60% duty cycle
-	TCA0.SPLIT.LPER = 127;       // set period to 1ms
-	TCA0.SPLIT.LCMP0 = 76;      // set duty cycle to 60%
+	// configure blade pwm: 1ms period, 60% duty cycle
+	TCA0.SPLIT.LPER = 77;       // set period to 1ms
+	TCA0.SPLIT.LCMP0 = 46;      // set duty cycle to 60%
 
-	// configure base PWM: 2ms period, 40% duty cycle
-	TCA0.SPLIT.HPER = 255;      // set period to 2ms
-	TCA0.SPLIT.HCMP0 = 102;      // set duty cycle to 40%
+	// configure base pwm: 2ms period, 40% duty cycle
+	TCA0.SPLIT.HPER = 155;      // set period to 2ms
+	TCA0.SPLIT.HCMP0 = 62;      // set duty cycle to 40%
 
 	// enable both compare channels
 	TCA0.SPLIT.CTRLB = TCA_SPLIT_LCMP0EN_bm | TCA_SPLIT_HCMP0EN_bm;
@@ -179,8 +179,8 @@ void init_pwm() {
 
 // change blade PWM to faster mode: 0.5ms period, 50% duty cycle
 void update_blade_fast() {
-	TCA0.SPLIT.LPER = 63;     // set period to 0.5ms
-	TCA0.SPLIT.LCMP0 = 31;    // set duty cycle to 50%
+	TCA0.SPLIT.LPER = 38;     // set period to 0.5ms
+	TCA0.SPLIT.LCMP0 = 19;    // set duty cycle to 50%
 }
 
 // start PWM generation
