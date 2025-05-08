@@ -9,6 +9,8 @@
     - everything is handled using interrupts (button press and PWM underflows)
 */
 
+/*
+
 #include <avr/io.h>
 #include <avr/interrupt.h>
 
@@ -30,22 +32,21 @@ void init_ports() {
 	PORTD.OUT |= LED_BLADE | LED_BASE;  // turn both LEDs off (active-low)
 
 	PORTF.DIR &= ~SWITCH;  // configure switch pin as input
-	PORTF.PIN6CTRL = PORT_PULLUPEN_bm | PORT_ISC_BOTHEDGES_gc;  // enable pull up and both edge interrupt
+	PORTF.PIN6CTRL = PORT_PULLUPEN_bm | PORT_ISC_BOTHEDGES_gc;  // enable pull-up and both edge interrupt
 }
 
 // initialize PWM in split mode for blade and base
 void init_pwm() {
 	TCA0.SPLIT.CTRLD = TCA_SPLIT_SPLITM_bm;  // enable split mode
-	TCA0.SPLIT.CTRLA = TCA_SPLIT_CLKSEL_DIV256_gc;  // set clock prescaler to 256
+	TCA0.SPLIT.CTRLA = TCA_SPLIT_CLKSEL_DIV64_gc;  // set clock prescaler to 64
 
-    // reverse 60% and 40% cause it start count from 255 0-255-254 ...
-	// configure blade pwm: 1ms period, 60% duty cycle
-	TCA0.SPLIT.LPER = 77;       // set period to 1ms
-	TCA0.SPLIT.LCMP0 = 31;      // set duty cycle to 40% 
-	
-	// configure base pwm: 2ms period, 40% duty cycle
-	TCA0.SPLIT.HPER = 155;      // set period to 2ms
-	TCA0.SPLIT.HCMP0 = 93;      // set duty cycle to 60%
+	// configure blade PWM: 1ms period, 60% duty cycle
+	TCA0.SPLIT.LPER = 51;       // set period to 1ms
+	TCA0.SPLIT.LCMP0 = 31;      // set duty cycle to 60%
+
+	// configure base PWM: 2ms period, 40% duty cycle
+	TCA0.SPLIT.HPER = 103;      // set period to 2ms
+	TCA0.SPLIT.HCMP0 = 41;      // set duty cycle to 40%
 
 	// enable both compare channels
 	TCA0.SPLIT.CTRLB = TCA_SPLIT_LCMP0EN_bm | TCA_SPLIT_HCMP0EN_bm;
@@ -56,15 +57,12 @@ void init_pwm() {
 
 // change blade PWM to faster mode: 0.5ms period, 50% duty cycle
 void update_blade_fast() {
-	TCA0.SPLIT.LPER = 38;     // set period to 0.5ms
-	TCA0.SPLIT.LCMP0 = 19;    // set duty cycle to 50%
+	TCA0.SPLIT.LPER = 25;     // set period to 0.5ms
+	TCA0.SPLIT.LCMP0 = 13;    // set duty cycle to 50%
 }
 
 // start PWM generation
 void start_pwm() {
-	// different phase for low and high timers
-	TCA0.SPLIT.LCNT = 0;
-	TCA0.SPLIT.HCNT = 5;
 	TCA0.SPLIT.CTRLA |= TCA_SPLIT_ENABLE_bm;  // enable the timer
 }
 
@@ -99,20 +97,17 @@ ISR(PORTF_PORT_vect) {
 }
 
 // blade PWM period complete, toggle base LED
-// start first 
 ISR(TCA0_LUNF_vect) {
 	TCA0.SPLIT.INTFLAGS = TCA_SPLIT_LUNF_bm;  // clear underflow flag
 
-	PORTD.OUT ^= LED_BLADE;   // turn blade LED on (active-low)
-
+	PORTD.OUT &= ~LED_BASE;   // turn base LED on (active-low)
+	PORTD.OUT |= LED_BLADE;   // turn blade LED off
 }
 
 // base PWM period complete, toggle blade LED
-// start second 
 ISR(TCA0_HUNF_vect) {
 	TCA0.SPLIT.INTFLAGS = TCA_SPLIT_HUNF_bm;  // clear underflow flag
 
-<<<<<<< HEAD
 	PORTD.OUT &= ~LED_BLADE;  // turn blade LED on (active-low)
 	PORTD.OUT |= LED_BASE;    // turn base LED off
 }
@@ -237,10 +232,6 @@ ISR(TCA0_HUNF_vect) {
 
 	PORTD.OUT &= ~LED_BLADE;  // turn blade LED on (active-low)
 	PORTD.OUT |= LED_BASE;    // turn base LED off
-=======
-	PORTD.OUT ^= LED_BASE;  // turn BASE LED on (active-low)
-
->>>>>>> b8ad4a52568d013602a643c9b7ed03c917eb312d
 }
 
 // main 
