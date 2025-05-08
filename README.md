@@ -1,4 +1,4 @@
-     Microcontroller Exercises Overview
+   Microcontroller Exercises Overview
 
 This repository contains a series of exercises designed to help you learn how to work with microcontrollers, control various peripherals using Pulse-Width Modulation (PWM), and manage interrupts. These exercises will guide you through the operation of timers, PWM signals, and external device management using LEDs, switches, and motors.
 Exercise Breakdown
