@@ -44,6 +44,17 @@ This repository contains a series of exercises designed to help you learn how to
 
 ---
 
+### Exercise 5: Soil Moisture Controlled Watering and Air Venting System
+- **Objective:** Automatically control watering and air venting based on soil moisture sensor readings.
+- **Concepts Covered:**
+  - ADC window comparator interrupts for moisture level detection
+  - Timer-based watering duration proportional to moisture deficit
+  - PWM control for air venting system
+  - Switch-based system enabling with interrupt handling
+  - LED signaling for system status and errors
+ 
+---
+
 ## Laboratory Exercises
 
 ### Laboratory Exercise 01: Elevator Simulation
@@ -124,5 +135,31 @@ This repository contains a series of exercises designed to help you learn how to
   - Interrupts on PWM edges to toggle LEDs
 
 ---
+
+### Laboratory Exercise 05: Greenhouse Simulation
+
+- **Objective:** Design a system that monitors soil moisture and automatically activates watering or air venting systems using LEDs and switches.
+- **Description:**
+  - Uses ADC to measure moisture sensor input.
+  - Two LEDs indicate moisture status:
+    - **Low Moisture LED (PD0):** Lights up when soil is too dry (needs watering).
+    - **High Moisture LED (PD1):** Lights up when soil is too wet (needs air venting).
+  - An air venting LED (PD2) indicates when air venting system is active.
+  - Switches on PF5 and PF6 enable watering and air venting systems respectively.
+  - Watering system runs for a period proportional to moisture deficit using a timer.
+  - Air venting system uses PWM to control venting duration and intensity.
+  - Incorrect switch usage triggers all LEDs as an error indicator.
+- **Key Concepts:**
+  - ADC with window comparator interrupts for moisture thresholds.
+  - Timer-based watering with variable duration.
+  - PWM for air venting control.
+  - External interrupts with pull-up enabled switches.
+  - Interrupt-driven LED signaling for system status and error conditions.
+- **System Components:**
+  - Moisture sensor input on ADC channel AIN7.
+  - LEDs on PORTD pins PD0, PD1, PD2.
+  - Switches on PORTF pins PF5 (watering enable), PF6 (air venting enable).
+  - Timers and PWM using TCA0 peripheral.
+
 
 
