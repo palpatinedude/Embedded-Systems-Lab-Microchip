@@ -60,6 +60,9 @@ void update_blade_fast() {
 
 // start PWM generation
 void start_pwm() {
+	// different phase for low and high timers
+         TCA0.SPLIT.LCNT = 0;
+         TCA0.SPLIT.HCNT = 5;
 	TCA0.SPLIT.CTRLA |= TCA_SPLIT_ENABLE_bm;  // enable the timer
 }
 
